@@ -1,12 +1,12 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views import View
+from django.views.generic import DetailView
 
 from account.forms import CustomAuthenticationForm, UserRegistrationForm
 
@@ -30,21 +30,33 @@ def custom_login(request):
     return render(request, "account/login.html", {"form": form})
 
 
-#
-# class UserProfile(DetailView):
-#     model = User
-#     pk_url_kwarg = None
-#     query_pk_and_slug = None
-#
-#     def get_queryset(self):
-#         return self.request.user
+class UserProfile(DetailView, LoginRequiredMixin):
+    model = User
+    pk_url_kwarg = None
+    query_pk_and_slug = None
+
+    def get_queryset(self):
+        return self.request.user
+
 
 @login_required
 def profile(request):
     return render(request, "account/profile.html", {"user": request.user})
 
 
-class RegisterView(FormView):
-    template_name = 'account/register.html'
-    form_class = UserCreationForm
-    success_url = reverse_lazy("account:login")
+class RegisterView(View):
+    # template_name = 'account/register.html'
+    # form_class = UserRegistrationForm
+    # success_url = reverse_lazy("account:login")
+
+    def post(self, request):
+        form = UserRegistrationForm(request.POST or None)
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            first_name = form.cleaned_data.get("first_name")
+            last_name = form.cleaned_data.get("last_name")
+            email = form.cleaned_data.get("email")
+            password = form.cleaned_data.get("password")
+            User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name)
+            return redirect("homepage")
+        return render(request, "account/register.html", {"form": form})

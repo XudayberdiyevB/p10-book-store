@@ -1,3 +1,27 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import User
+
+
+# Method1
+# class UserAdmin(admin.ModelAdmin):
+#     list_display = ["username", "email", "first_name", "last_name", "is_staff"]
+#     list_editable = ["first_name", "last_name"]
+#     list_filter = ["is_staff", "is_superuser", "is_active"]
+#     list_display_links = ["username", "email"]
+#     search_fields = ["username", "email", "first_name", "last_name"]
+#     search_help_text = "Qidirish"
+
+
+# admin.site.register(User, UserAdmin)
+
+
+# Method2
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ["username", "email", "first_name", "last_name", "is_staff"]
+    list_editable = ["first_name", "last_name"]
+    list_filter = ["is_staff", "is_superuser", "is_active"]
+    list_display_links = ["username", "email"]
+    search_fields = ["username", "email", "first_name", "last_name"]
+    search_help_text = "Qidirish"
