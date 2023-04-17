@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.text import slugify
 
@@ -18,7 +19,7 @@ class Book(models.Model):
     pub_year = models.PositiveIntegerField(null=True)
     page_size = models.PositiveIntegerField()
     lang = models.CharField(max_length=50, choices=LanguageTypes.choices)
-    file = models.FileField()
+    file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
     image = models.ImageField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
