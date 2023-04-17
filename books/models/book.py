@@ -30,6 +30,10 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def images_count(self):
+        return self.images.count()
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
@@ -39,3 +43,11 @@ class Book(models.Model):
 class BookAuthor(models.Model):
     name = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+
+
+class BookImage(models.Model):
+    book = models.ForeignKey("Book", on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="books")
+
+    def __str__(self):
+        return str(self.book)

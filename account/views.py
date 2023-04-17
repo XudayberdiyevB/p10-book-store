@@ -79,3 +79,22 @@ class UserProfileUpdate(UpdateView, LoginRequiredMixin):
         if form.is_valid():
             form.save()
         return render(self.request, "account/profile_edit.html", {"form": form})
+
+
+@login_required()
+def profile_edit(request):
+    if request.POST:
+        form = UserUpdateForm(request.POST or None, request.FILES or None, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("account:profile")
+    else:
+        form = UserUpdateForm()
+    return render(request, "account/profile_edit.html", {"form": form})
+
+
+@login_required()
+def profile_delete(request):
+    user = request.user
+    user.delete()
+    return redirect("homepage")

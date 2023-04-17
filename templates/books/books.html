@@ -11,6 +11,9 @@
                 {% include "books/book_item.html" %}
             {% endfor %}
         </div>
+        {% if request.user.is_staff %}
+            <a href="{% url 'book_add' %}">Add a book</a>
+        {% endif %}
     </div>
 
 {% endblock %}

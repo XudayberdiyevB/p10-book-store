@@ -19,5 +19,13 @@
                 <button class="btn btn-primary">Add to Cart</button>
             </div>
         </div>
+        <div class="row">
+            <h2>Found {{ book.images_count }} images</h2>
+            {% for book_image in book.images.all %}
+                <div class="col-md-6">
+                    <img src="{{ book_image.image.url }}">
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

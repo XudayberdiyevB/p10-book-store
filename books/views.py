@@ -1,7 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import redirect, render
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView
 
+from books.forms import BookAddForm
 from books.models import Book
 
 
@@ -32,6 +33,12 @@ class BooksListView(ListView):
     queryset = Book.objects.order_by("-id")
     template_name = "books/books.html"
     context_object_name = "books"
+
+
+class BookAddView(CreateView):
+    model = Book
+    form_class = BookAddForm
+    template_name = "books/book_add.html"
 
 
 class BookDetailView(DetailView):

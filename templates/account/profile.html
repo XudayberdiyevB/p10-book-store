@@ -32,8 +32,13 @@
                         <div class="row g-0">
                             <div class="col-md-4 gradient-custom text-center text-white"
                                  style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                                <img src="{{ user.profile_picture.url }}"
-                                     alt="Avatar" class="img-fluid my-5" style="width: 80px;"/>
+                                {% if user.profile_picture %}
+                                    <img src="{{ user.profile_picture.url }}"
+                                         alt="Avatar" class="img-fluid my-5" style="width: 80px;"/>
+                                {% else %}
+                                    <img src="https://www.freeiconspng.com/thumbs/profile-icon-png/am-a-19-year-old-multimedia-artist-student-from-manila--21.png"
+                                         alt="Avatar" class="img-fluid my-5" style="width: 80px;"/>
+                                {% endif %}
                                 <h5>{{ user.username }}</h5>
                                 <p>Username</p>
                                 <i class="far fa-edit mb-5"></i>
@@ -51,7 +56,8 @@
                                             <h6>Last login</h6>
                                             <p class="text-muted">{{ user.last_login|date }}</p>
                                         </div>
-                                        <a href="{% url 'account:profile_edit' user.id %}">Edit profile</a>
+                                        <a href="{% url 'account:profile_edit' %}">Edit profile</a>
+                                        <a href="{% url 'account:profile_delete' %}">Delete profile</a>
                                     </div>
                                     <div class="d-flex justify-content-start">
                                         <a href="#!"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
